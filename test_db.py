@@ -45,9 +45,6 @@ print(df)
 
 
 def add_roles():
-# We use the function modifydatabase() -- it has 2 arguments
-# The first argument is the sql code, where we use a placeholder %s
-# The second argument is ALWAYS a list of values to replace the %s in the sql code
    sqlcode = """ INSERT INTO roles (
    role_id,
    role_name,

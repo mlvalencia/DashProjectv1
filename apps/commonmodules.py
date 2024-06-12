@@ -34,7 +34,6 @@ navbar = dbc.Navbar(
             href="/home",
         ),
         dbc.NavLink("Home", href="/home", style=navlink_style),
-        dbc.NavLink("Take Test Now!", href="/taketest", style=navlink_style),
         dbc.NavLink("Employees", href="/employees", style=navlink_style),
         dbc.NavLink("Skills", href="/skills", style=navlink_style),
         dbc.NavLink("Roles", href="/roles", style=navlink_style),

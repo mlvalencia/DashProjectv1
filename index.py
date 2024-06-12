@@ -15,6 +15,7 @@ from apps import home
 from apps.skills import skills_home
 from apps.employees import employees_home
 from apps.roles import roles_home
+from apps.results import results_home
 
 CONTENT_STYLE = {
     "margin-top": "1em",
@@ -59,8 +60,8 @@ def displaypage (pathname):
                 # From the imported module 'home', we get the layout variable
                 returnlayout = home.layout
 
-            elif pathname == '/taketest':
-                returnlayout = 'Work in Progress'
+            # elif pathname == '/taketest':
+            #     returnlayout = 'Pls. contact your HR Business Partner to set up a scheduled exam'
 
             elif pathname == '/employees':
                 returnlayout = employees_home.layout
@@ -75,6 +76,8 @@ def displaypage (pathname):
             # elif pathname == '/movies/movies_profile':
             #     returnlayout = movies_profile.layout
 
+            elif pathname == '/results':
+                returnlayout = results_home.layout
             else:
                 returnlayout = 'error404'
 

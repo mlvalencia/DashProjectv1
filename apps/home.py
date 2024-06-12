@@ -13,12 +13,12 @@ from app import app
 # store the layout objects into a variable named layout
 layout = html.Div(
     [
-        html.H2('Welcome to our app!'),
+        html.H2('Welcome to our app!!'),
         html.Hr(),
         html.Div(
             [
                 html.Span(
-                    "Thru this app, you can manage a database of movies that are classified according to genres.",
+                    "Thru this app, you can view your competency in data sci.",
                 ),
                 html.Br(),
                 html.Br(),

@@ -85,7 +85,7 @@ layout = html.Div(
     ]
 )
 
-def moviehome_loadmovielist(pathname, searchterm):
+def employeehome_loademployeelist(pathname, searchterm):
     print(pathname)
     if pathname == '/employees':
         # 1. Obtain records from the DB via SQL
