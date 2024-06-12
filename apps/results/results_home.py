@@ -30,6 +30,7 @@ import plotly.graph_objs as go
 import plotly.graph_objects as go
 
 # get categories as list per skill and role via sql based on employee number
+# print employee name, division, role 
 
 
 categories = ['Data Analytics','Data Visualization','Problem Management',
@@ -37,12 +38,15 @@ categories = ['Data Analytics','Data Visualization','Problem Management',
 
 fig = go.Figure()
 
+#expected skill level
 fig.add_trace(go.Scatterpolar(
       r=[1, 5, 2, 2, 3],
       theta=categories,
       fill='toself',
-      name='Product A'
+      name='Expected Skill Level'
 ))
+
+#results 
 fig.add_trace(go.Scatterpolar(
       r=[4, 3, 2.5, 1, 2],
       theta=categories,
@@ -59,7 +63,7 @@ fig.update_layout(
   showlegend=False
 )
 
-# dynamic dropdown https://community.plotly.com/t/updating-a-dropdown-menus-contents-dynamically/4920/2 
+
 
 layout = html.Div(
     [
@@ -68,20 +72,20 @@ layout = html.Div(
         dbc.Row([
                 
                     dbc.Label("Employee Number", width=3),
-                    dbc.Col(
-                        dcc.Dropdown(
-                            searchable=True,
-                            options = [
-                                dict(label='Employee 1', value=1),
-                                dict(label='Employee 2', value=2),
-                                dict(label='Employee 3', value=3),
-                            ],
-                            style={'color': 'black'},
-                            id = 'dropdown-employees'  
-                        ))]),
+                       dbc.Col(
+                            dbc.Input(
+                                type='text',
+                                id='employee_number',
+                                placeholder='Enter Employee ID'
+                            ),
+                            width=5
+                                                )
+                       ]),
         dcc.Graph(id='scatterplot-skills',figure=fig),
         ]
 )
+
+
 
 # @app.callback(
 #     [

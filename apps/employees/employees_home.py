@@ -22,7 +22,7 @@ layout = html.Div(
             [
                 dbc.CardHeader( # Define Card Header
                     [
-                        html.H3('Manage Records')
+                        html.H3('Manage Employee Records')
                     ]
                 ),
                 dbc.CardBody( # Define Card Contents

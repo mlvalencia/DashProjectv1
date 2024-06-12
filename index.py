@@ -12,9 +12,9 @@ import webbrowser
 from app import app
 from apps import commonmodules as cm
 from apps import home
-from apps.skills import skills_home
-from apps.employees import employees_home
-from apps.roles import roles_home
+from apps.skills import skills_home, skills_profile
+from apps.employees import employees_home, employees_profile
+from apps.roles import roles_home, roles_profile
 from apps.results import results_home
 
 CONTENT_STYLE = {
@@ -66,11 +66,20 @@ def displaypage (pathname):
             elif pathname == '/employees':
                 returnlayout = employees_home.layout
 
+            elif pathname == '/employees/employees_profile':
+                returnlayout = employees_profile.layout
+
             elif pathname == '/skills':
                 returnlayout = skills_home.layout
 
+            elif pathname == '/skills/skills_profile':
+                returnlayout = skills_profile.layout
+
             elif pathname == '/roles':
                 returnlayout = roles_home.layout
+
+            elif pathname == '/roles/roles_profile':
+                returnlayout = roles_profile.layout
 
 
             # elif pathname == '/movies/movies_profile':
