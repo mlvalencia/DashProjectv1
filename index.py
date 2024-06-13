@@ -13,6 +13,7 @@ from app import app
 from apps import commonmodules as cm
 from apps import home
 from apps.skills import skills_home, skills_profile
+from apps.skills_map import skills_map_home
 from apps.employees import employees_home
 from apps.roles import roles_home, roles_profile
 from apps.results import results_home
@@ -72,18 +73,15 @@ def displaypage (pathname):
             elif pathname == '/skills':
                 returnlayout = skills_home.layout
 
-            elif pathname == '/skills/skills_profile':
-                returnlayout = skills_profile.layout
+            elif pathname == '/skills_map':
+                returnlayout = skills_map_home.layout
+
 
             elif pathname == '/roles':
                 returnlayout = roles_home.layout
 
-            elif pathname == '/roles/roles_profile':
-                returnlayout = roles_profile.layout
-
-
-            # elif pathname == '/movies/movies_profile':
-            #     returnlayout = movies_profile.layout
+            # elif pathname == '/roles/roles_profile':
+            #     returnlayout = roles_profile.layout
 
             elif pathname == '/results':
                 returnlayout = results_home.layout
