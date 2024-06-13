@@ -13,6 +13,17 @@ from app import app
 #for DB needs
 import dbconnect as db
 
+def get_employee_division():   
+    sql_emp = """
+    SELECT DISTINCT division FROM roles
+        """
+    values=[]
+    cols=['division']
+    df = db.querydatafromdatabase(sql_emp,values,cols)
+    return df['division'].tolist()
+
+list_division = (get_employee_division())
+
 # store the layout objects into a variable named layout
 layout = html.Div(
     [
@@ -22,45 +33,47 @@ layout = html.Div(
             [
                 dbc.CardHeader( # Define Card Header
                     [
-                        html.H3('Manage Employee Records')
+                        html.H3('Employee Database')
                     ]
                 ),
                 dbc.CardBody( # Define Card Contents
                     [
-                        html.Div( # Add Movie Btn
-                            [
-                                # Add movie button will work like a 
-                                # hyperlink that leads to another page
-                                dbc.Button(
-                                    "Add Employee",
-                                    href='/employees/employees_profile'
-                                )
-                            ]
-                        ),
                         html.Hr(),
-                        html.Div( # Create section to show list of movies
+                        html.Div( 
                             [
                                 html.H4('Find Employee'),
-                                html.Div(
-                                    dbc.Form(
+                                    dbc.Form([
                                         dbc.Row(
                                             [
-                                                dbc.Label("Search Title", width=1),
+                                                dbc.Label("Search by Employee Name", width=5),
                                                 dbc.Col(
                                                     dbc.Input(
                                                         type='text',
-                                                        id='moviehome_titlefilter',
-                                                        placeholder='Employee ID or Name'
+                                                        id='employeename_filter',
+                                                        placeholder='Employee Name'
                                                     ),
                                                     width=5
                                                 )
+                                            ],className='mb-3'),
+                                    #  html.Hr(), 
+                                      dbc.Row(
+                                            [
+                                                dbc.Label("Filter by Division", width=5),
+                                                    dbc.Col(
+                                                        dcc.Dropdown(
+                                                            options=[{'label':division, 'value':division} for division in list_division],
+                                                            id='employee_division',
+                                                            placeholder='Division'
+                                                        ),
+                                                        width=5
+                                                    )
                                             ],
                                             className='mb-3' # add 1em bottom margin
-                                        )
-                                    )
+                                        )]
+                                    )]
                                 ),
                                 html.Div(
-                                    "Table with employees will go here.",
+                                    "Insert Table here.",
                                     id='employeehome_employeelist'
                                 )
                             ]
@@ -69,9 +82,6 @@ layout = html.Div(
                 )
             ]
         )
-    ]
-)
-
 
 
 
@@ -81,32 +91,35 @@ layout = html.Div(
     ],
     [
         Input('url', 'pathname'),
-        Input('moviehome_titlefilter', 'value'), # changing the text box value should update the table
+        Input('employeename_filter', 'value'), # changing the text box value should update the table
+        Input('employee_division','value')
     ]
 )
-
-def employeehome_loademployeelist(pathname, searchterm):
+def employeehome_loademployeelist(pathname, searchterm,division):
     print(pathname)
     if pathname == '/employees':
-        # 1. Obtain records from the DB via SQL
-        # 2. Create the html element to return to the Div
-        sql = """ SELECT employee_id, employee_name
-        FROM employees
+
+        sql = """ 
+        SELECT employee_id, employee_name, role_name, division
+        FROM employees a
+        LEFT JOIN roles b 
+            on a.role_id = b.role_id 
         WHERE end_role_date is null
+        AND b.delete_date is null 
         """
         values = [] # blank since I do not have placeholders in my SQL
-        cols = ['employee_id', 'employee_name']
+        cols = ['Employee ID', 'Employee Name', 'Role', 'Division'] #table column names
         
         
         ### ADD THIS IF BLOCK
         if searchterm:
             # We use the operator ILIKE for pattern-matching
             sql += " AND employee_name ILIKE %s "
-
-            # The % before and after the term means that
-            # there can be text before and after
-            # the search term
             values += [f"%{searchterm}%"]
+        
+        if division:
+            sql += "AND division ILIKE %s"
+            values += [f"%{division}%"]
 
         df = db.querydatafromdatabase(sql, values, cols)
         
@@ -115,7 +128,7 @@ def employeehome_loademployeelist(pathname, searchterm):
                     hover=True, size='sm')
             return [table]
         else:
-            return ["No records to display"]
+            return "No records to display"
         
-    else:
-        raise PreventUpdate
+    else: 
+      raise PreventUpdate

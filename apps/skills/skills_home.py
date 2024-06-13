@@ -13,6 +13,8 @@ from app import app
 #for DB needs
 import dbconnect as db
 
+
+
 # store the layout objects into a variable named layout
 layout = html.Div(
     [
@@ -22,46 +24,48 @@ layout = html.Div(
             [
                 dbc.CardHeader( # Define Card Header
                     [
-                        html.H3('Manage Records')
+                        html.H3('Skills Database')
                     ]
                 ),
                 dbc.CardBody( # Define Card Contents
                     [
-                        html.Div( # Add Movie Btn
-                            [
-                                # Add movie button will work like a 
-                                # hyperlink that leads to another page
-                                dbc.Button(
-                                    "Add Skill",
-                                    href='/skills/skills_profile'
-                                )
-                            ]
-                        ),
                         html.Hr(),
-                        html.Div( # Create section to show list of movies
+                        html.Div( 
                             [
-                                html.H4('Find Skills'),
-                                html.Div(
-                                    dbc.Form(
+                                html.H4('Skills'),
+                                    dbc.Form([
                                         dbc.Row(
                                             [
-                                                dbc.Label("Search Title", width=1),
+                                                dbc.Label("Search by Skill Name", width=5),
                                                 dbc.Col(
                                                     dbc.Input(
                                                         type='text',
-                                                        id='moviehome_titlefilter',
+                                                        id='skillname_filter',
                                                         placeholder='Skill Name'
                                                     ),
                                                     width=5
                                                 )
+                                            ],className='mb-3'),
+                                    #  html.Hr(), 
+                                      dbc.Row(
+                                            [
+                                                dbc.Label("Filter by Skill Type", width=5),
+                                                    dbc.Col(
+                                                        dcc.Dropdown(
+                                                            options=['Enabling','Functional'],
+                                                            id='skilltype_filter',
+                                                            placeholder='Skill Type'
+                                                        ),
+                                                        width=5
+                                                    )
                                             ],
                                             className='mb-3' # add 1em bottom margin
-                                        )
-                                    )
+                                        )]
+                                    )]
                                 ),
                                 html.Div(
-                                    "Table with skills will go here.",
-                                    id='skillhome_skilllist'
+                                    "Insert Table here.",
+                                    id='skillhome_skillist'
                                 )
                             ]
                         )
@@ -69,45 +73,42 @@ layout = html.Div(
                 )
             ]
         )
-    ]
-)
-
 
 
 
 @app.callback(
     [
-        Output('skillhome_skilllist', 'children')
+        Output('skillhome_skillist', 'children')
     ],
     [
         Input('url', 'pathname'),
-        Input('moviehome_titlefilter', 'value'), # changing the text box value should update the table
+        Input('skillname_filter', 'value'),
+        Input('skilltype_filter','value') 
     ]
 )
-
-def skillshome_loadskillslist(pathname, searchterm):
+def employeehome_loademployeelist(pathname, searchterm, skilltype):
     print(pathname)
     if pathname == '/skills':
-        # 1. Obtain records from the DB via SQL
-        # 2. Create the html element to return to the Div
-        sql = """ SELECT skill_id, skill_name, level, description
+
+        sql = """ 
+        SELECT DISTINCT skill_name, skill_type, skill_level, description
         FROM skills
-        WHERE delete_date is null
+        WHERE 1=1 and delete_date is null
         """
         values = [] # blank since I do not have placeholders in my SQL
-        cols = ['Skill Code', 'Skill Name', 'Level', 'Description']
+        cols = ['Skill Name','Skill Type','Skill Level','Skill Description'] #table column names
         
         
         ### ADD THIS IF BLOCK
         if searchterm:
             # We use the operator ILIKE for pattern-matching
             sql += " AND skill_name ILIKE %s "
-
-            # The % before and after the term means that
-            # there can be text before and after
-            # the search term
             values += [f"%{searchterm}%"]
-
+        
+        if skilltype:
+            sql += "AND skill_type = %s"
+            values += [f"{skilltype}"]
+    
         df = db.querydatafromdatabase(sql, values, cols)
         
         if df.shape: # check if query returned anything
@@ -115,7 +116,7 @@ def skillshome_loadskillslist(pathname, searchterm):
                     hover=True, size='sm')
             return [table]
         else:
-            return ["No records to display"]
+            return "No records to display"
         
-    else:
-        raise PreventUpdate
+    else: 
+      raise PreventUpdate
