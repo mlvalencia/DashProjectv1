@@ -108,9 +108,23 @@ import plotly.graph_objects as go
 from app import app
 #for DB needs
 import dbconnect as db
-def get_employee_names():   
+
+
+def get_employee_names():   #get those w results only
     sql_emp = """
-    SELECT DISTINCT employee_name FROM employees
+
+    SELECT distinct d.employee_name
+        FROM roles a
+        JOIN test b 
+            on a.role_id = b.role_id 
+        JOIN skills c 
+            ON b.skill_id = c.skill_id 
+        JOIN employees d 
+            ON a.role_id = d.role_id
+        JOIN results e 
+            ON d.employee_id = e.employee_id and b.test_id = e.test_id
+        WHERE 1=1 
+
         """
     values=[]
     cols=['employee_name']
@@ -118,6 +132,15 @@ def get_employee_names():
     return df['employee_name'].tolist()
 
 list_employees = (get_employee_names())
+
+def blank_fig():
+    fig = go.Figure(go.Scatter(x=[], y = []))
+    fig.update_layout(template = None)
+    fig.update_xaxes(showgrid = False, showticklabels = False, zeroline=False)
+    fig.update_yaxes(showgrid = False, showticklabels = False, zeroline=False)
+    
+    return fig
+
 
 # store the layout objects into a variable named layout
 layout = html.Div(
@@ -208,7 +231,7 @@ def scatterplot_results_here(pathname, searchterm,emp_name,skilltype):
     if pathname == '/results':
 
         sql = """ 
-        SELECT distinct d.employee_name, a.role_name,  c.skill_name, b.expected_rating, e.rating
+        SELECT distinct d.employee_name, a.role_name,  c.skill_name, b.expected_rating, e.rating, d.employee_id, a.division
         FROM roles a
         JOIN test b 
             on a.role_id = b.role_id 
@@ -221,25 +244,28 @@ def scatterplot_results_here(pathname, searchterm,emp_name,skilltype):
         WHERE 1=1 
         """
         values = [] # blank since I do not have placeholders in my SQL
-        cols = ['employee_name','role_name','skill_name','expected_rating','rating'] #table column names
+        cols = ['employee_name','role_name','skill_name','expected_rating','rating','employee_id','division'] #table column names
         
         ### ADD THIS IF BLOCK
         if searchterm:
             # We use the operator ILIKE for pattern-matching
-            sql += " AND d.employee_id = %s "
+            sql += "AND d.employee_id ILIKE %s "
             values += [f"%{searchterm}%"]
 
         if emp_name:
-            sql += "AND d.employee_name = %s"
+            sql += "AND d.employee_name ILIKE %s"
             values += [f"%{emp_name}%"]
         
         if skilltype:
-            sql += "AND skill_type = %s"
+            sql += "AND skill_type ILIKE %s"
             values += [f"%{skilltype}%"]
 
         df = db.querydatafromdatabase(sql, values, cols)
         
         employee_name_str = df['employee_name'].unique()[0]
+        role_name_str = df['role_name'].unique()[0]
+        employee_id_str = df['employee_id'].unique()[0]
+        division_str = df['division'].unique()[0]
 
         if df.shape: # check if query returned anything
             fig = go.Figure()
@@ -267,7 +293,7 @@ def scatterplot_results_here(pathname, searchterm,emp_name,skilltype):
                 range=[0, 5]
                 )),
             showlegend=False,
-            title = f"Competency Mapping Results for {employee_name_str} for the role of "
+            title = f"Competency Mapping Results for {employee_name_str} (Employee#: {employee_id_str}) <br> for the role of {role_name_str} <br> under {division_str} <br><br>"
             )
             return [fig]
         else:
