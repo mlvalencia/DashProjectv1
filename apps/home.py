@@ -17,15 +17,15 @@ layout = html.Div(
         html.Hr(),
         html.Div(
             [
-                html.H5(
-                    "Welcome! Discover your data science talents' competencies and help drive team success. This is the official portal for the results of the data science skills competencies of the Data Science Group of Company XYZ.",
+                html.Span(
+                    "Welcome! Discover your data science talents' competencies and help drive team success. This is the official portal for the results of the data science skills competencies of the Data Science Group of BINI, Inc.",
                 ),
                 html.Br(),
-                html.H5(
+                html.Span(
                     "Explore your employee database, skill sets, and roles under different departments via their respective tabs.",
                 ),
                 html.Br(),
-                html.H5(
+                html.Span(
                     "Already took the assessment? Click below for the results.",
                 ),
                 html.Div(
@@ -43,7 +43,7 @@ layout = html.Div(
         
                 html.Br(),
                 html.Br(),
-                html.H6(
+                html.Span(
                     "Contact your HR Business Partner to schedule an assessment.",
                     style={'font-style':'italic'}
                 ),
