@@ -2,7 +2,7 @@ import psycopg2
 import pandas as pd
 
 
-# #uncomment this block for dev:
+#uncomment this block for dev:
 # def getdblocation():
 #    # Define your connection details
 #    db = psycopg2.connect(
@@ -16,7 +16,7 @@ import pandas as pd
 #    # return the connection details
 #    return db
 
-##uncomment for prod:
+#uncomment for prod:
 import os
 def getdblocation():
     DATABASE_URL = os.environ['DATABASE_URL']
@@ -25,7 +25,7 @@ def getdblocation():
 
 def modifydatabase(sql, values):
    db = getdblocation()
-
+######################
 
    # We create a cursor object
    # Cursor - a mechanism used to manipulate db objects on a per-row basis

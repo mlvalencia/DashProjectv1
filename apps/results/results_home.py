@@ -35,6 +35,7 @@ def get_employee_names():   #get those w results only
         JOIN results e 
             ON d.employee_id = e.employee_id and b.test_id = e.test_id
         WHERE 1=1 
+        and d.end_role_date is NULL 
 
         """
     values=[]
@@ -44,25 +45,23 @@ def get_employee_names():   #get those w results only
 
 list_employees = (get_employee_names())
 
-def blank_fig():
-    fig = go.Figure()
 
-    fig.add_trace(go.Scatterpolar(
-        r=[1,3,2,5,4],
-        theta=['','','','',''],
-        fill='toself',
-        name='No Data. Select Employee Name'
-    ))
+def blank_fig():
+    fig = go.Figure(go.Scatter(x=[], y = []))
+    fig.update_layout(template = None)
+    fig.update_xaxes(showgrid = False, showticklabels = False, zeroline=False)
+    fig.update_yaxes(showgrid = False, showticklabels = False, zeroline=False)
     fig.update_layout(
-            polar=dict(
-                radialaxis=dict(
-                visible=True,
-                range=[0, 5]
-                )),
-            showlegend=False,
-            title = f"Please Select Employee Name"
-            )
-    return [fig]
+    title = dict(
+        text=f"Please select employee name.",
+            x=0.5,
+            y=0.5,
+            xanchor='center',
+            yanchor='middle'
+    ),
+    title_font_family="sans-serif"
+    )
+    return fig
 
 
 
@@ -84,21 +83,9 @@ layout = html.Div(
                         html.Div( 
                             [
                                     dbc.Form([
-                                        # dbc.Row(
-                                        #     [
-                                        #         dbc.Label("Employee Name", width=5),
-                                        #         dbc.Col(
-                                        #             dbc.Input(
-                                        #                 type='text',
-                                        #                 id='employeename_filter',
-                                        #                 placeholder='Enter Employee Name'
-                                        #             ),
-                                        #             width=5
-                                        #         )
-                                        #     ],className='mb-3'),
                                     dbc.Row(
                                             [
-                                                dbc.Label("Employee Name", width=5),
+                                                dbc.Label("Employee Name", width=2),
                                                     dbc.Col(
                                                         dcc.Dropdown(
                                                             options=[{'label':employee, 'value':employee} for employee in list_employees],
@@ -113,7 +100,7 @@ layout = html.Div(
                                     #  html.Hr(), 
                                       dbc.Row(
                                             [
-                                                dbc.Label("Skill Type", width=5),
+                                                dbc.Label("Skill Type", width=2),
                                                     dbc.Col(
                                                         dcc.Dropdown(
                                                             options=['Enabling','Functional'],
@@ -129,12 +116,17 @@ layout = html.Div(
                                 ),
                                 html.Div(
                                      [dcc.Graph(id='spiderplot_results',figure=blank_fig()),
-                                     html.Button(id='reset',children = 'Clear')]
+                                     dbc.Button(color="warning",
+                                                size="lg",
+                                                className="d-grid gap-2 col-6 mx-auto my-2",
+                                                id='reset',children = 'Clear all',
+                                                style={"horizontalAlign": "left"})]
                                 )
                             ]
                         )
                     ]
-                )
+                ),
+        
             ]
         )
 
@@ -142,7 +134,9 @@ layout = html.Div(
 
 @app.callback(
     [
-        Output('spiderplot_results', 'figure')
+        Output('spiderplot_results', 'figure'),
+        Output('employeename_dropdown','value'),
+        Output('skilltype_filter','value'),
     ],
     [
         Input('url', 'pathname'),
@@ -153,30 +147,13 @@ layout = html.Div(
 )
 def spiderplotresults_here(pathname,emp_name,skilltype,n_clicks):
     print(pathname)
-    #if emp_name is not None:
-    # if ctx.triggered_id == 'reset':
-    #     fig1 = go.Figure(data=[go.Scatter(x=[], y=[])])
-    #     return fig1
-   
+
     if ctx.triggered_id == 'reset':
         fig = go.Figure()
 
-        fig.add_trace(go.Scatterpolar(
-            r=[1,3,2,5,4],
-            theta=['','','','',''],
-            fill='toself',
-            name='No Data. Select Employee Name'
-        ))
-        fig.update_layout(
-                polar=dict(
-                    radialaxis=dict(
-                    visible=True,
-                    range=[0, 5]
-                    )),
-                showlegend=False,
-                title = f"Please Select Employee Name"
-                )
-        return [fig]
+        fig = blank_fig()
+
+        return [fig,None,None]
 
     elif (emp_name is not None):
         if pathname == '/results':
@@ -193,6 +170,7 @@ def spiderplotresults_here(pathname,emp_name,skilltype,n_clicks):
             JOIN results e 
                 ON d.employee_id = e.employee_id and b.test_id = e.test_id
             WHERE 1=1 
+                and d.end_role_date is NULL
             """
             values = [] # blank since I do not have placeholders in my SQL
             cols = ['employee_name','role_name','skill_name','expected_rating','rating','employee_id','division'] #table column names
@@ -244,9 +222,18 @@ def spiderplotresults_here(pathname,emp_name,skilltype,n_clicks):
                     range=[0, 5]
                     )),
                 showlegend=False,
-                title = f"Competency Mapping Results for {employee_name_str} (Employee#: {employee_id_str}) <br> for the role of {role_name_str} <br> under {division_str} <br><br>"
+                title = dict(
+                    text=f"Competency Mapping Results for <b>{employee_name_str}</b> (Employee#:{employee_id_str}) <br>for the role of {role_name_str} under {division_str}",
+                      x=0.5,
+                      y=0.95,
+                      xanchor='center',
+                      yanchor='top',
+                ),
+                title_font_family="sans-serif"
                 )
-                return [fig]
+                fig.update_layout(margin=dict(t=150))
+
+                return [fig,emp_name,skilltype]
             else:
                 return PreventUpdate
         else:
