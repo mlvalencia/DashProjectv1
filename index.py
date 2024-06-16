@@ -12,11 +12,11 @@ import webbrowser
 from app import app
 from apps import commonmodules as cm
 from apps import home
-from apps.skills import skills_home, skills_profile
+from apps.skills import skills_home
 from apps.skills_map import skills_map_home
 from apps.employees import employees_home
-from apps.roles import roles_home, roles_profile
-from apps.results import results_home
+from apps.roles import roles_home
+from apps.results import results_home, results_div
 
 CONTENT_STYLE = {
     "margin-top": "1em",
@@ -78,15 +78,15 @@ def displaypage (pathname):
             elif pathname == '/skills_map':
                 returnlayout = skills_map_home.layout
 
-
             elif pathname == '/roles':
                 returnlayout = roles_home.layout
 
-            # elif pathname == '/roles/roles_profile':
-            #     returnlayout = roles_profile.layout
-
             elif pathname == '/results':
                 returnlayout = results_home.layout
+
+            elif pathname == '/results_division':
+                returnlayout = results_div.layout
+
             else:
                 returnlayout = 'error404'
 

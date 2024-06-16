@@ -42,6 +42,7 @@ navbar = dbc.Navbar(
         dbc.NavLink("Roles", href="/roles", style=navlink_style),
         dbc.NavLink("Skills Mapping", href="/skills_map", style=navlink_style),
         dbc.NavLink("Results", href="/results", style=navlink_style),
+        dbc.NavLink("Results by Division", href="/results_division", style=navlink_style)
     ],
     dark=True,
     color='#FF5376'

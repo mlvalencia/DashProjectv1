@@ -33,7 +33,7 @@ layout = html.Div(
             [
                 dbc.CardHeader( # Define Card Header
                     [
-                        html.H3('Skills Mapping')
+                        html.H3('Skills and Skill Levels by Role')
                     ]
                 ),
                 dbc.CardBody( # Define Card Contents
@@ -45,7 +45,7 @@ layout = html.Div(
                                     dbc.Form([
                                         dbc.Row(
                                             [
-                                                dbc.Label("Search by Role Name", width=5),
+                                                dbc.Label("Search by Role Name", width=2),
                                                 dbc.Col(
                                                     dbc.Input(
                                                         type='text',
@@ -58,7 +58,7 @@ layout = html.Div(
                                     #  html.Hr(), 
                                       dbc.Row(
                                             [
-                                                dbc.Label("Filter by Division", width=5),
+                                                dbc.Label("Filter by Division", width=2),
                                                     dbc.Col(
                                                         dcc.Dropdown(
                                                             options=[{'label':division, 'value':division} for division in list_division],

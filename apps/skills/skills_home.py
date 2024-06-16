@@ -36,7 +36,7 @@ layout = html.Div(
                                     dbc.Form([
                                         dbc.Row(
                                             [
-                                                dbc.Label("Search by Skill Name", width=5),
+                                                dbc.Label("Search by Skill Name", width=2),
                                                 dbc.Col(
                                                     dbc.Input(
                                                         type='text',
@@ -49,7 +49,7 @@ layout = html.Div(
                                     #  html.Hr(), 
                                       dbc.Row(
                                             [
-                                                dbc.Label("Filter by Skill Type", width=5),
+                                                dbc.Label("Filter by Skill Type", width=2),
                                                     dbc.Col(
                                                         dcc.Dropdown(
                                                             options=['Enabling','Functional'],
