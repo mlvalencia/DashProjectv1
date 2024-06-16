@@ -16,7 +16,8 @@ from apps.skills import skills_home
 from apps.skills_map import skills_map_home
 from apps.employees import employees_home
 from apps.roles import roles_home
-from apps.results import results_home, results_div
+from apps.results import results_home
+from apps.results import results_div
 
 CONTENT_STYLE = {
     "margin-top": "1em",
