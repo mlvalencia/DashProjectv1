@@ -2,19 +2,25 @@ import psycopg2
 import pandas as pd
 
 
-def getdblocation():
-   # Define your connection details
-   db = psycopg2.connect(
-       # Get your credentials from the pgadmin. More details below.
-       host='localhost',
-       database='271projectdash',
-       user='postgres',
-       port=5434,
-       password='monica1234'
-   )
-   # return the connection details
-   return db
+# def getdblocation():
+#    # Define your connection details
+#    db = psycopg2.connect(
+#        # Get your credentials from the pgadmin. More details below.
+#        host='localhost',
+#        database='271projectdash',
+#        user='postgres',
+#        port=5434,
+#        password='monica1234'
+#    )
+#    # return the connection details
+#    return db
 
+
+import os
+def getdblocation():
+    DATABASE_URL = os.environ['DATABASE_URL']
+    db = psycopg2.connect(DATABASE_URL, sslmode='require')
+    return db
 
 def modifydatabase(sql, values):
    db = getdblocation()
