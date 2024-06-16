@@ -92,7 +92,7 @@ layout = html.Div(
     [
         Input('url', 'pathname'),
         Input('employeename_filter', 'value'), # changing the text box value should update the table
-        Input('employee_division','value')
+        Input('employee_division','value'),
     ]
 )
 def employeehome_loademployeelist(pathname, searchterm,division):

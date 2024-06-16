@@ -17,16 +17,19 @@ from app import app
 
 # CSS Styling for the NavLink components
 navlink_style = {
-    'color': '#fff'
+    'color': '#fff',
+    'text-decoration':'none'
 }
 
 navbar = dbc.Navbar(
     [
-        html.A(
+        dbc.NavLink(
             # Use row and col to control vertical alignment of logo / brand
             dbc.Row(
                 [
-                    dbc.Col(dbc.NavbarBrand("Data Science Competency Dashboard ", className="ml-2")),
+                    dbc.Col(dbc.NavbarBrand("Data Science Competency Dashboard ", className="pl-10",
+                                           style={'font-style':'bold',
+                                                  'font-size':'20px'})),
                 ],
                 align="center",
                 className='g-0' # remove gutters (i.e. horizontal space between cols)
@@ -41,5 +44,5 @@ navbar = dbc.Navbar(
         dbc.NavLink("Results", href="/results", style=navlink_style),
     ],
     dark=True,
-    color='dark'
+    color='#FF5376'
 )

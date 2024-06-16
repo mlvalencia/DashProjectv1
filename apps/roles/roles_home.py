@@ -102,6 +102,7 @@ def rolehome_rolelist_fxn(pathname, searchterm,division):
         sql = """ 
         SELECT role_id, role_name, division
         FROM roles
+        WHERE 1=1
         """
         values = [] # blank since I do not have placeholders in my SQL
         cols = ['Role ID', 'Role Name', 'Division'] #table column names
