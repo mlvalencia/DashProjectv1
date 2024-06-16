@@ -18,13 +18,14 @@ layout = html.Div(
         html.Div(
             [
                 html.Span(
-                    "Welcome! Discover your data science talents' competencies and help drive team success. This is the official portal for the results of the data science skills competencies of the Data Science Group of BINI, Inc.",
+                    "Welcome! Discover your data science talents' competencies and help drive team success. This is the official portal for the results of the data science skills competency assessment of the Data Science Group of BINI, Inc.",
                 ),
                 html.Br(),
+                            html.Br(),
                 html.Span(
                     "Explore your employee database, skill sets, and roles under different departments via their respective tabs.",
                 ),
-                html.Br(),
+                html.Br(),                html.Br(),
                 html.Span(
                     "Already took the assessment? Click below for the results.",
                 ),
